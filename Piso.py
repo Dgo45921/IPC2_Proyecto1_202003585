@@ -1,5 +1,6 @@
 class Piso:
-    def __init__(self, rows, columns, costo_flip, costo_switch, patrones):
+    def __init__(self, nombre, rows, columns, costo_flip, costo_switch, patrones):
+        self.nombre = nombre
         self.rows = rows
         self.columns = columns
         self.costo_flip = costo_flip
