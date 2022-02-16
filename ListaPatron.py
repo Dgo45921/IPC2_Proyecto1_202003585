@@ -29,3 +29,16 @@ class ListaPatron:
         while actual is not None:
             print("codigo del patron: ", actual.patron.codigo, "el string del patron es: ", actual.patron.string_patron)
             actual = actual.siguiente
+
+
+    def Mostrar(self):
+        actual = self.primero
+        contador = 0
+        cadena = ""
+        while actual is not None:
+            subcadena = "                                          " + str(contador) + "." + "codigo del patron:   " + actual.patron.codigo  + "\n"
+            actual = actual.siguiente
+            cadena += subcadena
+            contador += 1
+
+        return cadena

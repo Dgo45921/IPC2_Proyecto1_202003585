@@ -3,10 +3,11 @@
   <component name="ChangeListManager">
     <list default="true" id="90e49960-bc05-48ca-a28e-79a6cca2344b" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ListaPatron.py" beforeDir="false" afterPath="$PROJECT_DIR$/ListaPatron.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ListaPiso.py" beforeDir="false" afterPath="$PROJECT_DIR$/ListaPiso.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ManejoXml.py" beforeDir="false" afterPath="$PROJECT_DIR$/ManejoXml.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Patron.py" beforeDir="false" afterPath="$PROJECT_DIR$/Patron.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Piso.py" beforeDir="false" afterPath="$PROJECT_DIR$/Piso.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -72,7 +73,7 @@
       <workItem from="1644704778109" duration="643000" />
       <workItem from="1644779125022" duration="594000" />
       <workItem from="1644863553715" duration="18303000" />
-      <workItem from="1644940984500" duration="11234000" />
+      <workItem from="1644940984500" duration="17699000" />
     </task>
     <servers />
   </component>
@@ -91,7 +92,18 @@
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/main.py</url>
+          <line>27</line>
+          <option name="timeStamp" value="19" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/Proyecto$main.coverage" NAME="main Coverage Results" MODIFIED="1644954339916" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Proyecto$main.coverage" NAME="main Coverage Results" MODIFIED="1644975996556" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

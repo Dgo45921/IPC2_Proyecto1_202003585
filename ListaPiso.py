@@ -34,3 +34,14 @@ class ListaPiso:
             print("los patrones pertenecientes son: ")
             actual.piso.patrones.recorrer()
             actual = actual.siguiente
+
+
+    def Mostrar(self):
+        contador = 1
+        actual = self.primero
+        print("-----------Nombre del piso---------------------Filas---------------------Columnas-------------------precio por voltear azulejo--------------precio por intercambiar azulejos-----")
+        while actual is not None:
+            actual.piso.num = contador
+            print(str(actual.piso.num) + ". " + actual.piso.nombre + "                                          " + str(actual.piso.rows) + "                           " + str(actual.piso.columns) + "                              " + str(actual.piso.costo_flip) + "                                      " + str(actual.piso.costo_switch))
+            actual = actual.siguiente
+            contador += 1
