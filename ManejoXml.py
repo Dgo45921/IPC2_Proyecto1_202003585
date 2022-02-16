@@ -37,14 +37,14 @@ def Leer(ruta):
             for patrones in raiz.findall(xpath):
                 datos = patrones.findall("patron")
                 for dato in datos:
-                    new_patron = Patron(dato.get("codigo"), dato.text)
+                    new_patron = Patron(dato.get("codigo"), dato.text, 0)
                     lista_patrones.insertar(new_patron)
 
             new_piso = Piso(name, rows, columns, flip, switch, lista_patrones, 0)
             lista_pisos.insertar(new_piso)
         print("Datos cargados con éxito, regresando al menú principal")
         datos_cargados = True
-        print("hry")
+
 
 
     except Exception as e:

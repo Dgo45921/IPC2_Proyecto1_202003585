@@ -33,10 +33,11 @@ class ListaPatron:
 
     def Mostrar(self):
         actual = self.primero
-        contador = 0
+        contador = 1
         cadena = ""
         while actual is not None:
-            subcadena = "                                          " + str(contador) + "." + "codigo del patron:   " + actual.patron.codigo  + "\n"
+            actual.patron.num = contador
+            subcadena = str(actual.patron.num) + "." + "codigo del patron: " + actual.patron.codigo + "  cadena ingresada para el patron:  " + actual.patron.string_patron + "\n"
             actual = actual.siguiente
             cadena += subcadena
             contador += 1
