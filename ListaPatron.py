@@ -34,7 +34,8 @@ class ListaPatron:
     def Mostrar(self):
         actual = self.primero
         contador = 1
-        cadena = ""
+        cadena = "--------------------Patrones disponibles-------------------------\n"
+
         while actual is not None:
             actual.patron.num = contador
             subcadena = str(actual.patron.num) + "." + "codigo del patron: " + actual.patron.codigo + "  cadena ingresada para el patron:  " + actual.patron.string_patron + "\n"
@@ -43,3 +44,13 @@ class ListaPatron:
             contador += 1
 
         return cadena
+
+    def Buscar(self, num):
+        actual = self.primero
+        while actual and actual.patron.num != num:
+            actual = actual.siguiente
+
+        if actual is not None:
+            return actual
+        else:
+            return None

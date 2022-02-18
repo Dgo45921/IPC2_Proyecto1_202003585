@@ -51,9 +51,10 @@ class ListaPiso:
 
     def buscar(self, num):
         actual = self.primero
-        while actual.siguiente:
-            if actual.piso.num == num:
-                return actual
-            else:
-                actual = actual.siguiente
-        return None
+        while actual and actual.piso.num != num:
+            actual = actual.siguiente
+
+        if actual is not None:
+            return actual
+        else:
+            return None

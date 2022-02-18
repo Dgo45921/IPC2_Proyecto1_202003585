@@ -1,4 +1,6 @@
 from tkinter import filedialog
+
+import FuncionCelda
 import ManejoXml
 from ManejoXml import Leer
 
@@ -44,7 +46,13 @@ def MostrarMenu2():
                     print("Ingrese el número al lado de cada opción para usar las funciones para este piso. Si desea regresar ingrese la letra 'r' ")
                     print("1. Ver patrones disponibles para este piso\n 2. Costeo para pasar de un patrón a otro para este piso en específico")
                     opc = input()
-                    MostrarMenu3(opc, piso_buscado)
+                    if opc == "r":
+                        MostrarMenu2()
+                    else:
+                        opc = int(opc)
+                        if opc == 1:
+                            MostrarMenu3(piso_buscado)
+
                 else:
                     print("Piso no existente. Seleccione únicamente los pisos mostrados")
                     MostrarMenu2()
@@ -57,26 +65,26 @@ def MostrarMenu2():
 
 
 
-def MostrarMenu3(opc, piso_encontrado):
+def MostrarMenu3(piso_encontrado):
     try:
-        if opc == "r":
+        datospatrones = piso_encontrado.piso.patrones.Mostrar()
+        print(datospatrones)
+        print(
+            "si desea visualizar el patron ingrese el número que está al lado de este. Si desea regresar ingrese la letra 'r' ")
+        opcion = input()
+        if opcion == "r":
             MostrarMenu2()
         else:
-            opc = int(opc)
-            if opc == 1:
-                datospatrones = piso_encontrado.piso.patrones.Mostrar()
-                print(datospatrones)
-                print("si desea visualizar el patron ingrese el número que está al lado de este. Si desea regresar ingrese la letra 'r' ")
-                opcion = input()
-                if opcion == "r":
-                    MostrarMenu2()
-                else:
-                    opcion = int(opcion)
+            opcion = int(opcion)
+            patron_encontrado = piso_encontrado.piso.patrones.Buscar(opcion)
+            if patron_encontrado is not None:
+                FuncionCelda.MostrarCeldas(patron_encontrado, piso_encontrado)
+                MostrarMenu3(piso_encontrado)
 
-            elif opc == 2:
-                print("costeo")
-    except:
-        print("Ingrese únicamente los números mostrados anteriormente o la letra 'r'")
+
+
+    except Exception as e:
+        print("Ingrese únicamente los números mostrados anteriormente o la letra 'r'", e)
 
 
 
