@@ -47,6 +47,8 @@ def MostrarMenu2():
                         opc = int(opc)
                         if opc == 1:
                             MostrarMenu3(piso_buscado)
+                        elif opc == 2:
+                            Costeo(piso_buscado)
 
                 else:
                     print("Piso no existente. Seleccione únicamente los pisos mostrados")
@@ -82,6 +84,38 @@ def MostrarMenu3(piso_encontrado):
         print("Ingrese únicamente los números mostrados anteriormente o la letra 'r'", e)
 
 
+
+def Costeo(piso_encontrado):
+    try:
+        datospatrones = piso_encontrado.piso.patrones.Mostrar()
+        print(datospatrones)
+        print("ingrese el número al lado del patrón del que quiere partir, de lo contrario ingrese la letra r para regresar")
+        opcion = input()
+        if opcion == "r":
+            MostrarMenu2()
+        else:
+            opcion = int(opcion)
+            patron_encontrado1 = piso_encontrado.piso.patrones.Buscar(opcion)
+            if patron_encontrado1 is not None:
+                print("Patron válido, ingrese el número del patron destino")
+                opcion2 = int(input())
+                patron_encontrado2 = piso_encontrado.piso.patrones.Buscar(opcion2)
+                if patron_encontrado1 == patron_encontrado2:
+                    print("ingrese patrones distintos")
+                    Costeo(piso_encontrado)
+                else:
+                    print("aqui va la funcion del costeo donde mandaeromos los dos patrones")
+
+            else:
+                print("ingrese un patron valido")
+
+
+
+
+
+
+    except Exception as e:
+        print("Ingrese únicamente los números mostrados anteriormente o la letra 'r'", e)
 
 
 
