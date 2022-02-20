@@ -1,5 +1,4 @@
-from graphviz import render
-from PIL import Image
+from os import startfile, system
 
 
 def MostrarCeldas(Patron, Piso):
@@ -13,7 +12,7 @@ def MostrarCeldas(Patron, Piso):
     cadena = '''  
 digraph html {
  tabla [shape=none, margin=0, label=<
- <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="10">
+ <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="2.5" CELLPADDING="20">
     '''
     cadena += "<TR>\n"
 
@@ -39,8 +38,6 @@ digraph html {
     archivo_nuevo.write(cadena)
     archivo_nuevo.close()
 
-    render("dot", "png", "grafica.dot")
+    system("dot -Tpng " + "grafica.dot" + " -o " + "grafica.png")
+    startfile("grafica.png")
 
-    im = Image.open(r"grafica.dot.png")
-
-    im.show()

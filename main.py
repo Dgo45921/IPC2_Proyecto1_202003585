@@ -1,10 +1,6 @@
-from tkinter import filedialog
-
 import FuncionCelda
 import ManejoXml
 from ManejoXml import Leer
-
-
 
 
 
@@ -16,16 +12,15 @@ def MostrarMenuPrincipal():
         try:
             option = int(input())
             if option == 1:
-                print("Cargar xml")
-                Ruta = filedialog.askopenfilename(title="Selecciona un archivo", initialdir="/",
-                                                  filetypes=(("xml files", "*.xml"), ("", "")))
+                print("Ingrese la ruta absoluta de su archivo .xml")
+                Ruta = input()
                 Leer(Ruta)
             elif option == 2:
                 MostrarMenu2()
             elif option == 3:
                 break
-        except Exception as e:
-            print(e)
+        except:
+            print("Asegurese que su archivo sea válido")
 
 
 def MostrarMenu2():
