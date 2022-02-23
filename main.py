@@ -1,6 +1,7 @@
 import FuncionCelda
 import ManejoXml
 from ManejoXml import Leer
+from Costeo import InicioCosteo
 
 
 
@@ -48,7 +49,11 @@ def MostrarMenu2():
                         if opc == 1:
                             MostrarMenu3(piso_buscado)
                         elif opc == 2:
-                            Costeo(piso_buscado)
+                            Costeo_pisos(piso_buscado)
+
+                        else:
+                            print("seleccione una opción válida")
+                            MostrarMenu2()
 
                 else:
                     print("Piso no existente. Seleccione únicamente los pisos mostrados")
@@ -77,6 +82,9 @@ def MostrarMenu3(piso_encontrado):
             if patron_encontrado is not None:
                 FuncionCelda.MostrarCeldas(patron_encontrado, piso_encontrado)
                 MostrarMenu3(piso_encontrado)
+            else:
+                print("patron no encontrado, ingrese solamente los que están disponibles")
+                MostrarMenu3(piso_encontrado)
 
 
 
@@ -85,11 +93,11 @@ def MostrarMenu3(piso_encontrado):
 
 
 
-def Costeo(piso_encontrado):
+def Costeo_pisos(piso_encontrado):
     try:
+        print("ingrese el número al lado del patrón del que quiere partir, de lo contrario ingrese la letra r para regresar")
         datospatrones = piso_encontrado.piso.patrones.Mostrar()
         print(datospatrones)
-        print("ingrese el número al lado del patrón del que quiere partir, de lo contrario ingrese la letra r para regresar")
         opcion = input()
         if opcion == "r":
             MostrarMenu2()
@@ -102,12 +110,17 @@ def Costeo(piso_encontrado):
                 patron_encontrado2 = piso_encontrado.piso.patrones.Buscar(opcion2)
                 if patron_encontrado1 == patron_encontrado2:
                     print("ingrese patrones distintos")
-                    Costeo(piso_encontrado)
+                    Costeo_pisos(piso_encontrado)
+                elif patron_encontrado2 is None:
+                    print("ingrese un patron válido")
+                    Costeo_pisos(piso_encontrado)
                 else:
-                    print("aqui va la funcion del costeo donde mandaeromos los dos patrones")
+                    InicioCosteo(piso_encontrado, patron_encontrado1, patron_encontrado2)
+
 
             else:
                 print("ingrese un patron valido")
+                Costeo_pisos(piso_encontrado)
 
 
 
