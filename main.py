@@ -1,10 +1,7 @@
-from tkinter import filedialog
-
 import FuncionCelda
 import ManejoXml
 from ManejoXml import Leer
-
-
+from Costeo import InicioCosteo
 
 
 
@@ -16,16 +13,15 @@ def MostrarMenuPrincipal():
         try:
             option = int(input())
             if option == 1:
-                print("Cargar xml")
-                Ruta = filedialog.askopenfilename(title="Selecciona un archivo", initialdir="/",
-                                                  filetypes=(("xml files", "*.xml"), ("", "")))
+                print("Ingrese la ruta absoluta de su archivo .xml")
+                Ruta = input()
                 Leer(Ruta)
             elif option == 2:
                 MostrarMenu2()
             elif option == 3:
                 break
-        except Exception as e:
-            print(e)
+        except:
+            print("Asegurese que su archivo sea válido")
 
 
 def MostrarMenu2():
@@ -52,6 +48,12 @@ def MostrarMenu2():
                         opc = int(opc)
                         if opc == 1:
                             MostrarMenu3(piso_buscado)
+                        elif opc == 2:
+                            Costeo_pisos(piso_buscado)
+
+                        else:
+                            print("seleccione una opción válida")
+                            MostrarMenu2()
 
                 else:
                     print("Piso no existente. Seleccione únicamente los pisos mostrados")
@@ -80,6 +82,9 @@ def MostrarMenu3(piso_encontrado):
             if patron_encontrado is not None:
                 FuncionCelda.MostrarCeldas(patron_encontrado, piso_encontrado)
                 MostrarMenu3(piso_encontrado)
+            else:
+                print("patron no encontrado, ingrese solamente los que están disponibles")
+                MostrarMenu3(piso_encontrado)
 
 
 
@@ -87,6 +92,43 @@ def MostrarMenu3(piso_encontrado):
         print("Ingrese únicamente los números mostrados anteriormente o la letra 'r'", e)
 
 
+
+def Costeo_pisos(piso_encontrado):
+    try:
+        print("ingrese el número al lado del patrón del que quiere partir, de lo contrario ingrese la letra r para regresar")
+        datospatrones = piso_encontrado.piso.patrones.Mostrar()
+        print(datospatrones)
+        opcion = input()
+        if opcion == "r":
+            MostrarMenu2()
+        else:
+            opcion = int(opcion)
+            patron_encontrado1 = piso_encontrado.piso.patrones.Buscar(opcion)
+            if patron_encontrado1 is not None:
+                print("Patron válido, ingrese el número del patron destino")
+                opcion2 = int(input())
+                patron_encontrado2 = piso_encontrado.piso.patrones.Buscar(opcion2)
+                if patron_encontrado1 == patron_encontrado2:
+                    print("ingrese patrones distintos")
+                    Costeo_pisos(piso_encontrado)
+                elif patron_encontrado2 is None:
+                    print("ingrese un patron válido")
+                    Costeo_pisos(piso_encontrado)
+                else:
+                    InicioCosteo(piso_encontrado, patron_encontrado1, patron_encontrado2)
+
+
+            else:
+                print("ingrese un patron valido")
+                Costeo_pisos(piso_encontrado)
+
+
+
+
+
+
+    except Exception as e:
+        print("Ingrese únicamente los números mostrados anteriormente o la letra 'r'", e)
 
 
 

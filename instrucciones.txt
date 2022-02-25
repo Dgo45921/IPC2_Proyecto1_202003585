@@ -1,0 +1,3 @@
+la celda con fila: 0 y columna: 1 ha sido intercambiada con la celda con fila: 0 y columna: 2 se llevan: 1.0
+la celda con fila: 0 y columna: 0 ha sido intercambiada con la celda con fila: 0 y columna: 1 se llevan: 2.0
+la celda con fila: 0 y columna: 2 ha sido intercambiada con la celda con fila: 0 y columna: 3 se llevan: 3.0
