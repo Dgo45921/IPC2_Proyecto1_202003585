@@ -3,18 +3,9 @@ digraph html {
  tabla [shape=none, margin=0, label=<
  <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="2.5" CELLPADDING="20">
     <TR>
+ <TD BGCOLOR="black"> </TD>
  <TD> </TD>
-</TR>
-<TR>
  <TD BGCOLOR="black"> </TD>
-</TR>
-<TR>
- <TD BGCOLOR="black"> </TD>
-</TR>
-<TR>
- <TD BGCOLOR="black"> </TD>
-</TR>
-<TR>
- <TD BGCOLOR="black"> </TD>
+ <TD> </TD>
 </TR>
 </TABLE>>];}  
