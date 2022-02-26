@@ -1,4 +1,3 @@
-import Costeo
 from NodoCelda import NodoCelda
 from Manejo_archivos import Crear_Instrucciones
 from copy import deepcopy
@@ -309,6 +308,26 @@ class Tablero_Lineal:
             actual = actual.siguiente
             actual2 = actual2.siguiente
 
+
+    def count_white(self):
+        actual = self.primero
+        contador = 0
+        while actual:
+            if actual.celda.color:
+                contador += 1
+
+            actual = actual.siguiente
+        return contador
+
+    def count_black(self):
+        actual = self.primero
+        contador = 0
+        while actual:
+            if not actual.celda.color:
+                contador += 1
+
+            actual = actual.siguiente
+        return contador
 
 
 
