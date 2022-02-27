@@ -76,18 +76,18 @@ class Tablero_Lineal:
             #se prioriza hacer los intercambios
             #esta funcion debe de retornar el coste total de resolver la matriz lineal con solo intercambios
 
-            self.hacer_intercambios_lineales_derecha(lista_celdas_destino, costo_switch)
+            solucion_intercambios_simples += self.hacer_intercambios_lineales_derecha(lista_celdas_destino, costo_switch)
 
             if not self.comparar_listas(lista_celdas_destino):
-                self.hacer_intercambios_lineales_izquierda(lista_celdas_destino, costo_switch)
+                solucion_intercambios_simples += self.hacer_intercambios_lineales_izquierda(lista_celdas_destino, costo_switch)
 
             if not self.comparar_listas(lista_celdas_destino):
-                self.cambio_minimo(lista_celdas_destino, costo_switch)
-                self.hacer_intercambios_lineales_derecha(lista_celdas_destino, costo_switch)
-                self.hacer_intercambios_lineales_izquierda(lista_celdas_destino, costo_switch)
+                solucion_intercambios_simples += self.cambio_minimo(lista_celdas_destino, costo_switch)
+                solucion_intercambios_simples += self.hacer_intercambios_lineales_derecha(lista_celdas_destino, costo_switch)
+                solucion_intercambios_simples += self.hacer_intercambios_lineales_izquierda(lista_celdas_destino, costo_switch)
 
 
-            lista_origen.voltear_todas(lista_celdas_destino, costo_flip)
+            solucion_volteando_celdas += lista_origen.voltear_todas(lista_celdas_destino, costo_flip)
 
             if coste_volteando_celdas < coste_intercambios_simples:
                 print("¿desea ver las instrucciones para solucionar este problema en la consola o lo desea en un archivo .txt?\nSi desea ver las instrucciones en consola ingrese la letra 'c' , si deseas tenerlas en un archivo .txt ingrese la letra 't' ")
@@ -128,9 +128,9 @@ class Tablero_Lineal:
 
         else:
             print("se necesitan voltear celdas")
-            self.hacer_intercambios_lineales_derecha(lista_celdas_destino, costo_switch)
-            self.hacer_intercambios_lineales_izquierda(lista_celdas_destino, costo_switch)
-            self.voltear_todas(lista_celdas_destino, costo_flip)
+            solucion_intercambios_simples += self.hacer_intercambios_lineales_derecha(lista_celdas_destino, costo_switch)
+            solucion_intercambios_simples += self.hacer_intercambios_lineales_izquierda(lista_celdas_destino, costo_switch)
+            solucion_volteando_celdas += self.voltear_todas(lista_celdas_destino, costo_flip)
 
             solucion_total = solucion_intercambios_simples + solucion_volteando_celdas
             costo_total = coste_volteando_celdas + coste_intercambios_simples
@@ -163,7 +163,8 @@ class Tablero_Lineal:
                     FuncionCelda.Imprimir_lineales(lista_origen2, lista_celdas_destino)
 
     def hacer_intercambios_lineales_izquierda(self, lista_celdas_destino, costo_switch):
-        global coste_intercambios_simples, solucion_intercambios_simples
+        global coste_intercambios_simples
+        solucion_intercambios_simples = ""
         actual = self.ultimo
         actual2 = lista_celdas_destino.ultimo
         while actual is not None and actual2 is not None:
@@ -205,8 +206,11 @@ class Tablero_Lineal:
 
         #print(solucion_intercambios_simples)
 
+        return solucion_intercambios_simples
+
     def hacer_intercambios_lineales_derecha(self, lista_celdas_destino, costo_switch):
-        global coste_intercambios_simples, solucion_intercambios_simples
+        global coste_intercambios_simples
+        solucion_intercambios_simples = ""
         actual = self.primero
         actual2 = lista_celdas_destino.primero
         while actual is not None and actual2 is not None:
@@ -250,8 +254,11 @@ class Tablero_Lineal:
 
         #print(solucion_intercambios_simples)
 
+        return solucion_intercambios_simples
+
     def cambio_minimo(self, lista_celdas_destino, costo_switch):
-        global coste_intercambios_simples, solucion_intercambios_simples
+        global coste_intercambios_simples
+        solucion_intercambios_simples = ""
         actual = self.primero
         actual2 = lista_celdas_destino.primero
         while actual and actual2:
@@ -292,9 +299,11 @@ class Tablero_Lineal:
         #self.recorrer()
         #print("matriz destino\n")
         #print(solucion_intercambios_simples)
+        return solucion_intercambios_simples
 
     def voltear_todas(self, lista_celdas_destino, costo_flip):
-        global coste_volteando_celdas, solucion_volteando_celdas
+        global coste_volteando_celdas
+        solucion_volteando_celdas = ""
         actual = self.primero
         actual2 = lista_celdas_destino.primero
         while actual and actual2:
@@ -307,6 +316,8 @@ class Tablero_Lineal:
 
             actual = actual.siguiente
             actual2 = actual2.siguiente
+
+        return solucion_volteando_celdas
 
 
     def count_white(self):
