@@ -1,0 +1,2 @@
+la celda con fila: 0 y columna: 3 ha sido intercambiada con la celda con fila: 0 y columna: 4 el coste es: 1.0
+Se ha volteado la celda con fila x: 0 y columna: 5 el coste es: 3.0

@@ -74,7 +74,7 @@ class Tablero:
             solucion_intercambios_simples += self.intercambios_arriba_abajo_no_estricto(matriz_destino, costo_switch)
             #solucion_intercambios_simples += self.intercambios_derecha_izquierda(matriz_destino, costo_switch)
             print(solucion_intercambios_simples)
-            
+
 
 
 
@@ -88,13 +88,14 @@ class Tablero:
         cadena_solucion = ""
         fila_actual = self.primero
         fila_actual_destino = matriz_destino.primero
-        cantidad_celdas_blancas_fila_actual = fila_actual.contenido_fila.count_white()
-        cantidad_celdas_negras_fila_actual = fila_actual.contenido_fila.count_black()
 
-        cantidad_celdas_blancas_fila_destino = fila_actual_destino.contenido_fila.count_white()
-        cantidad_celdas_negras_fila_destino = fila_actual_destino.contenido_fila.count_black()
 
         while fila_actual.siguiente is not None:
+            cantidad_celdas_blancas_fila_actual = fila_actual.contenido_fila.count_white()
+            cantidad_celdas_negras_fila_actual = fila_actual.contenido_fila.count_black()
+
+            cantidad_celdas_blancas_fila_destino = fila_actual_destino.contenido_fila.count_white()
+            cantidad_celdas_negras_fila_destino = fila_actual_destino.contenido_fila.count_black()
 
             actual_celda1 = fila_actual.contenido_fila.primero # se comienza por la primera fila
             actual_celda2 = fila_actual.siguiente.contenido_fila.primero # se comienza la segunda fila
@@ -104,7 +105,7 @@ class Tablero:
 
 
                 if cantidad_celdas_blancas_fila_actual < cantidad_celdas_blancas_fila_destino:
-                    print("se necesitan celdas blancas en la fila actual de la fila siguiente")
+                    print("se necesitan celdas blancas, exceso de celdas negras")
 
                     if actual_celda2.celda.color and not actual_celda1.celda.color:
                         actual_celda1.celda.color = not actual_celda1.celda.color
@@ -114,7 +115,7 @@ class Tablero:
 
                         cadena_solucion += "la celda en la fila: " + str(actual_celda1.celda.x) + " y columna: "+ str(
                             actual_celda1.celda.y) + " se ha intercambiado con la celda en la fila: " + str(
-                            actual_celda2.celda.x) + " y en la columna: " + str(actual_celda2.celda.y) +  " el coste es de: " +str(Tablero_Lineal.coste_intercambios_simples) +"\n"
+                            actual_celda2.celda.x) + " y en la columna: " + str(actual_celda2.celda.y) + " el coste es de: " +str(Tablero_Lineal.coste_intercambios_simples) +"\n"
 
 
                         #print("la celda en la fila: ", actual_celda1.celda.x, " y columna: ", actual_celda1.celda.y,
@@ -132,6 +133,7 @@ class Tablero:
                         continue
 
                 if cantidad_celdas_blancas_fila_actual > cantidad_celdas_blancas_fila_destino:
+                    print("se necesitan celdas negras, exceso de celdas blancas")
 
                     if not actual_celda2.celda.color and actual_celda1.celda.color:
                         actual_celda1.celda.color = not actual_celda1.celda.color
@@ -159,7 +161,7 @@ class Tablero:
 
 
                 if cantidad_celdas_negras_fila_actual < cantidad_celdas_negras_fila_destino:
-                    print("se necesitan celdas negras en la fila actual")
+                    print("se necesitan celdas negras, exceso de blancas")
 
                     if not actual_celda2.celda.color and actual_celda1.celda.color:
                         actual_celda1.celda.color = not actual_celda1.celda.color
@@ -186,6 +188,7 @@ class Tablero:
                         continue
 
                 if cantidad_celdas_negras_fila_actual > cantidad_celdas_negras_fila_destino:
+                    print("se necesitan celdas blancas, exceso de negras")
                     if actual_celda2.celda.color and not actual_celda1.celda.color:
                         actual_celda1.celda.color = not actual_celda1.celda.color
                         actual_celda2.celda.color = not actual_celda2.celda.color
