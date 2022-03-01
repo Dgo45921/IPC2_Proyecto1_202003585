@@ -3,11 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="90e49960-bc05-48ca-a28e-79a6cca2344b" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FuncionCelda.py" beforeDir="false" afterPath="$PROJECT_DIR$/FuncionCelda.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ListaPatron.py" beforeDir="false" afterPath="$PROJECT_DIR$/ListaPatron.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ListaPiso.py" beforeDir="false" afterPath="$PROJECT_DIR$/ListaPiso.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ManejoXml.py" beforeDir="false" afterPath="$PROJECT_DIR$/ManejoXml.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tablero.py" beforeDir="false" afterPath="$PROJECT_DIR$/Tablero.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Tablero_Lineal.py" beforeDir="false" afterPath="$PROJECT_DIR$/Tablero_Lineal.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/grafica.dot" beforeDir="false" afterPath="$PROJECT_DIR$/grafica.dot" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/grafica.png" beforeDir="false" afterPath="$PROJECT_DIR$/grafica.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/grafica_destino.dot" beforeDir="false" afterPath="$PROJECT_DIR$/grafica_destino.dot" afterDir="false" />
@@ -106,7 +102,8 @@
       <workItem from="1645807147735" duration="24457000" />
       <workItem from="1645890315180" duration="594000" />
       <workItem from="1645895152204" duration="27125000" />
-      <workItem from="1645988461277" duration="4196000" />
+      <workItem from="1645988461277" duration="9890000" />
+      <workItem from="1646063147545" duration="21325000" />
     </task>
     <servers />
   </component>
@@ -148,10 +145,20 @@
           <line>94</line>
           <option name="timeStamp" value="35" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Tablero_Lineal.py</url>
+          <line>232</line>
+          <option name="timeStamp" value="74" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Tablero_Lineal.py</url>
+          <line>110</line>
+          <option name="timeStamp" value="75" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/Proyecto$main.coverage" NAME="main Coverage Results" MODIFIED="1646013699304" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Proyecto$main.coverage" NAME="main Coverage Results" MODIFIED="1646095460418" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
