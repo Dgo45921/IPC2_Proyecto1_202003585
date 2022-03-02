@@ -5,9 +5,13 @@ digraph html {
     <TR>
  <TD> </TD>
  <TD BGCOLOR="black"> </TD>
- <TD BGCOLOR="black"> </TD>
  <TD> </TD>
  <TD BGCOLOR="black"> </TD>
+</TR>
+<TR>
  <TD> </TD>
+ <TD> </TD>
+ <TD> </TD>
+ <TD BGCOLOR="black"> </TD>
 </TR>
 </TABLE>>];} 

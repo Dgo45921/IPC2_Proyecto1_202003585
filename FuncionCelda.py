@@ -71,10 +71,6 @@ digraph html {
 
 
 
-
-
-
-
 def Imprimir_lineales(lista_origen, lista_destino):
     filas = 1
     columnas1 = lista_origen.size
@@ -85,10 +81,6 @@ def Imprimir_lineales(lista_origen, lista_destino):
 
     contador_filas2 = 0
     contador_columnas2 = 0
-
-
-
-
 
 
 
@@ -161,6 +153,70 @@ def Imprimir_lineales(lista_origen, lista_destino):
             contador_columnas2 = 0
 
         actual2 = actual2.siguiente
+
+    cadena2 += '</TABLE>>];}  '
+
+    archivo_nuevo = open("grafica_destino.dot", "w")
+    archivo_nuevo.write(cadena2)
+    archivo_nuevo.close()
+
+    system("dot -Tpng " + "grafica_destino.dot" + " -o " + "grafica_destino.png")
+    startfile("grafica_destino.png")
+
+
+
+def Imprimir_matriciales(matriz_origen, matriz_destino):
+    cadena1 = """digraph html {
+labelloc="t";
+       label="Patron origen";
+ tabla [shape=none, margin=0, label=<
+ <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="2.5" CELLPADDING="20">    """
+
+    fila_actual = matriz_origen.primero
+
+    while fila_actual:
+        cadena1 += "<TR>"
+        celda_actual = fila_actual.contenido_fila.primero
+        while celda_actual:
+            if celda_actual.celda.color:
+                cadena1 += "<TD> </TD>"
+            else:
+                cadena1 += '<TD BGCOLOR="black"> </TD>'
+
+            celda_actual = celda_actual.siguiente
+
+        fila_actual = fila_actual.siguiente
+        cadena1 += "</TR>"
+
+    cadena1 += "</TABLE>>];}"
+    archivo_nuevo = open("grafica_origen.dot", "w")
+    archivo_nuevo.write(cadena1)
+    archivo_nuevo.close()
+
+    system("dot -Tpng " + "grafica_origen.dot" + " -o " + "grafica_origen.png")
+    startfile("grafica_origen.png")
+
+    cadena2 = """digraph html {
+    labelloc="t";
+           label="Patron destino";
+     tabla [shape=none, margin=0, label=<
+     <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="2.5" CELLPADDING="20">    """
+
+    fila_actual2 = matriz_destino.primero
+
+    while fila_actual2:
+        cadena2 += "<TR>"
+        celda_actual2 = fila_actual2.contenido_fila.primero
+        while celda_actual2:
+            if celda_actual2.celda.color:
+                cadena2 += "<TD> </TD>"
+            else:
+                cadena2 += '<TD BGCOLOR="black"> </TD>'
+
+            celda_actual2 = celda_actual2.siguiente
+
+        fila_actual2 = fila_actual2.siguiente
+        cadena2 += "</TR>"
 
     cadena2 += '</TABLE>>];}  '
 

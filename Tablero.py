@@ -1,8 +1,15 @@
+import FuncionCelda
+import Manejo_archivos
 from NodoFila import NodoFila
-import Tablero_Lineal
+from Tablero_Lineal import Tablero_Lineal
+from copy import deepcopy
+
 
 solucion_intercambios_simples = ""
 solucion_volteando_celdas = ""
+coste_intercambios = 0
+coste_volteos = 0
+cambios_hechos = 0
 
 
 class Tablero:
@@ -30,7 +37,6 @@ class Tablero:
 
             actual = actual.siguiente
 
-
     def count_black(self):
         actual = self.primero
         contador = 0
@@ -40,7 +46,6 @@ class Tablero:
                 if not actual_fila.celda.color:
                     contador += 1
                 actual_fila = actual_fila.siguiente
-
 
             actual = actual.siguiente
 
@@ -60,275 +65,453 @@ class Tablero:
 
         return contador
 
+    def Buscar_celda(self, x, y):
+        actual_fila = self.primero
+        while actual_fila:
+            actual_celda_fila = actual_fila.contenido_fila.primero
+            while actual_celda_fila:
+                if actual_celda_fila.celda.x == x and actual_celda_fila.celda.y == y:
+                    return actual_celda_fila.celda
+
+                actual_celda_fila = actual_celda_fila.siguiente
+            actual_fila = actual_fila.siguiente
+
+    def Voltear_erroneas(self, matriz_destino, costo_flip):
+        global solucion_volteando_celdas, coste_volteos
+        fila_actual_origen = self.primero
+        fila_actual_destino = matriz_destino.primero
+        while fila_actual_origen and fila_actual_destino:
+            celda_actual_origen = fila_actual_origen.contenido_fila.primero
+            celda_actual_destino = fila_actual_destino.contenido_fila.primero
+            while celda_actual_destino and celda_actual_origen:
+
+                if celda_actual_origen.celda.color != celda_actual_destino.celda.color:
+                    coste_volteos += costo_flip
+                    solucion_volteando_celdas += "La celda en la fila: " + str(
+                    celda_actual_origen.celda.x) + " y columna: " + str(
+                    celda_actual_origen.celda.y) + " ha sido volteada el coste acumulado es de: " + str(coste_volteos) + "\n"
+                    celda_actual_origen.celda.color = not celda_actual_origen.celda.color
+
+                celda_actual_destino = celda_actual_destino.siguiente
+                celda_actual_origen = celda_actual_origen.siguiente
+
+            fila_actual_destino = fila_actual_destino.siguiente
+            fila_actual_origen = fila_actual_origen.siguiente
+
+
+
+
+    def comparar_matrices(self, matriz_destino):
+        fila_actual_origen = self.primero
+        fila_actual_destino = matriz_destino.primero
+        while fila_actual_origen and fila_actual_destino:
+            celda_actual_origen = fila_actual_origen.contenido_fila.primero
+            celda_actual_destino = fila_actual_destino.contenido_fila.primero
+            while celda_actual_destino and celda_actual_origen:
+
+                if celda_actual_origen.celda.color != celda_actual_destino.celda.color:
+                    return False
+
+                celda_actual_destino = celda_actual_destino.siguiente
+                celda_actual_origen = celda_actual_origen.siguiente
+
+            fila_actual_destino = fila_actual_destino.siguiente
+            fila_actual_origen = fila_actual_origen.siguiente
+        return True
 
     def Resolver(self, matriz_destino, filas, columnas, costo_flip, costo_switch):
-        global solucion_intercambios_simples
+        global solucion_intercambios_simples, solucion_volteando_celdas, coste_intercambios, coste_volteos
+        coste_intercambios = coste_volteos = 0
+        solucion_volteando_celdas = solucion_intercambios_simples = ""
         casillas_blancas_origen = self.count_white()
         casillas_negras_origen = self.count_black()
         casillas_blancas_destino = matriz_destino.count_white()
         casillas_negras_destino = matriz_destino.count_black()
+        matriz_para_voltear = deepcopy(self)
+        matriz_para_imprimir = deepcopy(self)
 
         if casillas_negras_destino == casillas_negras_origen and casillas_blancas_destino == casillas_blancas_origen:
             print("no hay necesidad de hacer cambios")
-            solucion_intercambios_simples += self.intercambios_arriba_abajo_estricto(matriz_destino, costo_switch)
-            solucion_intercambios_simples += self.intercambios_arriba_abajo_no_estricto(matriz_destino, costo_switch)
-            #solucion_intercambios_simples += self.intercambios_derecha_izquierda(matriz_destino, costo_switch)
-            print(solucion_intercambios_simples)
+            while not self.comparar_matrices(matriz_destino):
+                self.hallar_celdas_erroneas(matriz_destino, filas, costo_flip, costo_switch)
+            matriz_para_voltear.Voltear_erroneas(matriz_destino, costo_flip)
 
 
+            if coste_volteos < coste_intercambios or coste_intercambios == coste_volteos:
+                print("es mas barato voltear todas")
+                print("Para visualizar los pasos para resolver la matriz usted debe de escoger una opción:")
+                print("Si desea ver la solución paso a paso en consola ingrese la letra 'c', si desea verla en un archivo.txt ingrese la letra 't' ")
+                opcion = input()
 
+                if opcion == "c":
+                    print(solucion_volteando_celdas)
+                    FuncionCelda.Imprimir_matriciales(matriz_para_imprimir, matriz_destino)
+
+                elif opcion == "t":
+                    Manejo_archivos.Crear_Instrucciones(solucion_volteando_celdas)
+                    FuncionCelda.Imprimir_matriciales(matriz_para_imprimir, matriz_destino)
+
+
+            elif coste_volteos > coste_intercambios:
+                print("es mejor intercambiar")
+                print("Para visualizar los pasos para resolver la matriz usted debe de escoger una opción:")
+                print(
+                    "Si desea ver la solución paso a paso en consola ingrese la letra 'c', si desea verla en un archivo.txt ingrese la letra 't' ")
+                opcion = input()
+                if opcion == "c":
+                    print(solucion_intercambios_simples)
+                    FuncionCelda.Imprimir_matriciales(matriz_para_imprimir, matriz_destino)
+                elif opcion == "t":
+                    Manejo_archivos.Crear_Instrucciones(solucion_intercambios_simples)
+                    FuncionCelda.Imprimir_matriciales(matriz_para_imprimir, matriz_destino)
 
 
         else:
             print("se necesitan voltear casillas")
-
-
-    def intercambios_arriba_abajo_no_estricto(self, matriz_destino, costo_switch):
-
-        cadena_solucion = ""
-        fila_actual = self.primero
-        fila_actual_destino = matriz_destino.primero
-
-
-        while fila_actual.siguiente is not None:
-            cantidad_celdas_blancas_fila_actual = fila_actual.contenido_fila.count_white()
-            cantidad_celdas_negras_fila_actual = fila_actual.contenido_fila.count_black()
-
-            cantidad_celdas_blancas_fila_destino = fila_actual_destino.contenido_fila.count_white()
-            cantidad_celdas_negras_fila_destino = fila_actual_destino.contenido_fila.count_black()
-
-            actual_celda1 = fila_actual.contenido_fila.primero # se comienza por la primera fila
-            actual_celda2 = fila_actual.siguiente.contenido_fila.primero # se comienza la segunda fila
-            actual_celda_correcta = fila_actual_destino.contenido_fila.primero # se comienza la primera fila de la matriz destino
-            while actual_celda1 and actual_celda2:
-                #recorriendo celdas de la matriz origen y destino
-
-
-                if cantidad_celdas_blancas_fila_actual < cantidad_celdas_blancas_fila_destino:
-                    print("se necesitan celdas blancas, exceso de celdas negras")
-
-                    if actual_celda2.celda.color and not actual_celda1.celda.color:
-                        actual_celda1.celda.color = not actual_celda1.celda.color
-                        actual_celda2.celda.color = not actual_celda2.celda.color
-
-                        Tablero_Lineal.coste_intercambios_simples += costo_switch
-
-                        cadena_solucion += "la celda en la fila: " + str(actual_celda1.celda.x) + " y columna: "+ str(
-                            actual_celda1.celda.y) + " se ha intercambiado con la celda en la fila: " + str(
-                            actual_celda2.celda.x) + " y en la columna: " + str(actual_celda2.celda.y) + " el coste es de: " +str(Tablero_Lineal.coste_intercambios_simples) +"\n"
-
-
-                        #print("la celda en la fila: ", actual_celda1.celda.x, " y columna: ", actual_celda1.celda.y,
-                             # " se ha intercambiado con la celda en la fila: "
-                             # , actual_celda2.celda.x, " y en la columna: ", actual_celda2.celda.y)
-
-                        cantidad_celdas_blancas_fila_actual = fila_actual.contenido_fila.count_white()
-                        cantidad_celdas_negras_fila_actual = fila_actual.contenido_fila.count_black()
-
-
-                        actual_celda1 = actual_celda1.siguiente
-                        actual_celda2 = actual_celda2.siguiente
-                        actual_celda_correcta = actual_celda_correcta.siguiente
-
-                        continue
-
-                if cantidad_celdas_blancas_fila_actual > cantidad_celdas_blancas_fila_destino:
-                    print("se necesitan celdas negras, exceso de celdas blancas")
-
-                    if not actual_celda2.celda.color and actual_celda1.celda.color:
-                        actual_celda1.celda.color = not actual_celda1.celda.color
-                        actual_celda2.celda.color = not actual_celda2.celda.color
-                        Tablero_Lineal.coste_intercambios_simples += costo_switch
-
-                        cadena_solucion += "la celda en la fila: " + str(actual_celda1.celda.x) + " y columna: " + str(
-                            actual_celda1.celda.y) + " se ha intercambiado con la celda en la fila: " + str(
-                            actual_celda2.celda.x) + " y en la columna: " + str(
-                            actual_celda2.celda.y) + " el coste es de: " + str(Tablero_Lineal.coste_intercambios_simples) + "\n"
-
-
-                       # print("la celda en la fila: ", actual_celda1.celda.x, " y columna: ", actual_celda1.celda.y,
-                              #" se ha intercambiado con la celda en la fila: "
-                              #, actual_celda2.celda.x, " y en la columna: ", actual_celda2.celda.y)
-
-                        cantidad_celdas_blancas_fila_actual = fila_actual.contenido_fila.count_white()
-                        cantidad_celdas_negras_fila_actual = fila_actual.contenido_fila.count_black()
-
-
-                        actual_celda1 = actual_celda1.siguiente
-                        actual_celda2 = actual_celda2.siguiente
-                        actual_celda_correcta = actual_celda_correcta.siguiente
-                        continue
-
-
-                if cantidad_celdas_negras_fila_actual < cantidad_celdas_negras_fila_destino:
-                    print("se necesitan celdas negras, exceso de blancas")
-
-                    if not actual_celda2.celda.color and actual_celda1.celda.color:
-                        actual_celda1.celda.color = not actual_celda1.celda.color
-                        actual_celda2.celda.color = not actual_celda2.celda.color
-
-                        Tablero_Lineal.coste_intercambios_simples += costo_switch
-
-                        cadena_solucion += "la celda en la fila: " + str(actual_celda1.celda.x) + " y columna: " + str(
-                            actual_celda1.celda.y) + " se ha intercambiado con la celda en la fila: " + str(
-                            actual_celda2.celda.x) + " y en la columna: " + str(
-                            actual_celda2.celda.y) + " el coste es de: " + str(Tablero_Lineal.coste_intercambios_simples) + "\n"
-
-                        #print("la celda en la fila: ", actual_celda1.celda.x, " y columna: ", actual_celda1.celda.y,
-                              #" se ha intercambiado con la celda en la fila: "
-                              #, actual_celda2.celda.x, " y en la columna: ", actual_celda2.celda.y)
-
-                        cantidad_celdas_blancas_fila_actual = fila_actual.contenido_fila.count_white()
-                        cantidad_celdas_negras_fila_actual = fila_actual.contenido_fila.count_black()
-
-
-                        actual_celda1 = actual_celda1.siguiente
-                        actual_celda2 = actual_celda2.siguiente
-                        actual_celda_correcta = actual_celda_correcta.siguiente
-                        continue
-
-                if cantidad_celdas_negras_fila_actual > cantidad_celdas_negras_fila_destino:
-                    print("se necesitan celdas blancas, exceso de negras")
-                    if actual_celda2.celda.color and not actual_celda1.celda.color:
-                        actual_celda1.celda.color = not actual_celda1.celda.color
-                        actual_celda2.celda.color = not actual_celda2.celda.color
-
-                        Tablero_Lineal.coste_intercambios_simples += costo_switch
-
-                        cadena_solucion += "la celda en la fila: " + str(actual_celda1.celda.x) + " y columna: " + str(
-                            actual_celda1.celda.y) + " se ha intercambiado con la celda en la fila: " + str(
-                            actual_celda2.celda.x) + " y en la columna: " + str(
-                            actual_celda2.celda.y) + " el coste es de: " + str(Tablero_Lineal.coste_intercambios_simples) + "\n"
-
-                       # print("la celda en la fila: ", actual_celda1.celda.x, " y columna: ", actual_celda1.celda.y,
-                              #" se ha intercambiado con la celda en la fila: "
-                             # , actual_celda2.celda.x, " y en la columna: ", actual_celda2.celda.y)
-
-                        cantidad_celdas_blancas_fila_actual = fila_actual.contenido_fila.count_white()
-                        cantidad_celdas_negras_fila_actual = fila_actual.contenido_fila.count_black()
-
-                        actual_celda1 = actual_celda1.siguiente
-                        actual_celda2 = actual_celda2.siguiente
-                        actual_celda_correcta = actual_celda_correcta.siguiente
-                        continue
-
-
-
-
-                actual_celda1 = actual_celda1.siguiente
-                actual_celda2 = actual_celda2.siguiente
-                actual_celda_correcta = actual_celda_correcta.siguiente
-
-            fila_actual = fila_actual.siguiente
-            fila_actual_destino = fila_actual_destino.siguiente
-
-
-        print("matriz origen")
-        self.recorrer()
-        print("matriz destino")
-        matriz_destino.recorrer()
-        return cadena_solucion
-
-    def intercambios_arriba_abajo_estricto(self, matriz_destino, costo_switch):
-
-        cadena_solucion = ""
-        fila_actual = self.primero
-        fila_actual_destino = matriz_destino.primero
-
-
-        while fila_actual.siguiente is not None:
-
-            actual_celda1 = fila_actual.contenido_fila.primero # se comienza por la primera fila
-            actual_celda2 = fila_actual.siguiente.contenido_fila.primero # se comienza la segunda fila
-            actual_celda_correcta = fila_actual_destino.contenido_fila.primero # se comienza la primera fila de la matriz destino
-            actual_celda_correcta2 = fila_actual_destino.siguiente.contenido_fila.primero  # se comienza la primera fila de la matriz destino
-            while actual_celda1 and actual_celda2:
-                #recorriendo celdas de la matriz origen y destino
-
-                if actual_celda1.celda.color != actual_celda2.celda.color and actual_celda_correcta2.celda.color == actual_celda1.celda.color and actual_celda_correcta.celda.color == actual_celda2.celda.color:
-                    actual_celda1.celda.color = not actual_celda1.celda.color
-                    actual_celda2.celda.color = not actual_celda2.celda.color
-
-                    Tablero_Lineal.coste_intercambios_simples += costo_switch
-
-                    cadena_solucion += "la celda en la fila: " + str(actual_celda1.celda.x) + " y columna: " + str(
-                        actual_celda1.celda.y) + " se ha intercambiado con la celda en la fila: " + str(
-                        actual_celda2.celda.x) + " y en la columna: " + str(
-                        actual_celda2.celda.y) + " el coste es de: " + str(
-                        Tablero_Lineal.coste_intercambios_simples) + "\n"
-
-
-
-                actual_celda1 = actual_celda1.siguiente
-                actual_celda2 = actual_celda2.siguiente
-                actual_celda_correcta = actual_celda_correcta.siguiente
-                actual_celda_correcta2 = actual_celda_correcta2.siguiente
-
-
-            fila_actual = fila_actual.siguiente
-            fila_actual_destino = fila_actual_destino.siguiente
-
-
-        print("matriz origen")
-        self.recorrer()
-        print("matriz destino")
-        matriz_destino.recorrer()
-        return cadena_solucion
-
-
-
-    def intercambios_derecha_izquierda(self, matriz_destino, costo_switch):
-        cadena_solucion = ""
-        fila_actual = self.primero
-        fila_actual_destino = matriz_destino.primero
-
-        while fila_actual:
-            actual_celda1 = fila_actual.contenido_fila  # se obtiene la priemra fila
-            actual_celda_correcta = fila_actual_destino.contenido_fila  # se obtiene la fila correcta
-
-            cadena_solucion += actual_celda1.hacer_intercambios_lineales_derecha(actual_celda_correcta, costo_switch)
-            cadena_solucion += actual_celda1.hacer_intercambios_lineales_izquierda(actual_celda_correcta, costo_switch)
-
-
-
-
-            fila_actual = fila_actual.siguiente
-            fila_actual_destino = fila_actual_destino.siguiente
-
-        return cadena_solucion
-
-    def cambio_especial_filas(self, matriz_destino, costo_switch):
-        cadena_solucion = ""
-        fila_actual = self.primero
-        fila_actual_destino = matriz_destino.primero
-
-        while fila_actual:
-            actual_celda1 = fila_actual.contenido_fila  # se obtiene la priemra fila
-            actual_celda_correcta = fila_actual_destino.contenido_fila  # se obtiene la fila correcta
-            estado = actual_celda1.comparar_listas(actual_celda_correcta)
-            if not estado:
-                cadena_solucion += actual_celda1.cambio_minimo(actual_celda_correcta, costo_switch)
-
-            fila_actual = fila_actual.siguiente
-            fila_actual_destino = fila_actual_destino.siguiente
-
-        return cadena_solucion
-
-    def chequear_resuelta(self, matriz_destino):
-
-        fila_actual = self.primero
-        fila_actual_destino = matriz_destino.primero
-        while fila_actual and fila_actual_destino:
-            lista_celdas = fila_actual.contenido_fila
-            lista_celdas_destino = fila_actual_destino.contenido_fila
-            estado = lista_celdas.comparar_listas(lista_celdas_destino)
-
-            if not estado:
+            self.hallar_celdas_erroneas(matriz_destino, filas, costo_flip, costo_switch)
+            while cambios_hechos > 0:
+                self.hallar_celdas_erroneas(matriz_destino, filas, costo_flip, costo_switch)
+            self.Voltear_erroneas(matriz_destino, costo_flip)
+
+            costo_total = coste_volteos + coste_intercambios
+            solucion_total = "----pasos intercambios----\n" + solucion_intercambios_simples +"\n ----pasos volteos----\n" + solucion_volteando_celdas + "\nEl coste final ha sido de: " + str(costo_total)
+
+            coste_volteos = 0
+            solucion_volteando_celdas = ""
+
+            matriz_para_voltear.Voltear_erroneas(matriz_destino, costo_flip)
+
+            if costo_total < coste_volteos or costo_total == coste_volteos:
+                print("es mejor voltear")
+                print("Para visualizar los pasos para resolver la matriz usted debe de escoger una opción:")
+                print(
+                    "Si desea ver la solución paso a paso en consola ingrese la letra 'c', si desea verla en un archivo.txt ingrese la letra 't' ")
+                opcion = input()
+
+                if opcion == "c":
+                    print(solucion_total)
+                    FuncionCelda.Imprimir_matriciales(matriz_para_imprimir, matriz_destino)
+                elif opcion == "t":
+                    Manejo_archivos.Crear_Instrucciones(solucion_total)
+                    FuncionCelda.Imprimir_matriciales(matriz_para_imprimir, matriz_destino)
+
+            elif coste_volteos < costo_total:
+                print("Para visualizar los pasos para resolver la matriz usted debe de escoger una opción:")
+                print(
+                    "Si desea ver la solución paso a paso en consola ingrese la letra 'c', si desea verla en un archivo.txt ingrese la letra 't' ")
+                opcion = input()
+
+                if opcion == "c":
+                    print(costo_total)
+                    FuncionCelda.Imprimir_matriciales(matriz_para_imprimir, matriz_destino)
+                elif opcion == "t":
+                    Manejo_archivos.Crear_Instrucciones(costo_total)
+                    FuncionCelda.Imprimir_matriciales(matriz_para_imprimir, matriz_destino)
+
+
+    def hallar_celdas_erroneas(self, matriz_destino, filas, costo_flip, costo_switch):
+        global cambios_hechos
+        primer_nodo_erroneo = None
+        segundo_nodo_erroneo = None
+        actual_fila_origen = self.primero
+        actual_fila_destino = matriz_destino.primero
+        distancia_entre_celdas_erroneas = 0
+        while actual_fila_destino and actual_fila_origen:  # se comienza recorriendo las filas
+            actual_lista_origen = actual_fila_origen.contenido_fila.primero
+            actual_lista_destino = actual_fila_destino.contenido_fila.primero
+            while actual_lista_destino and actual_lista_origen:  # se recorren las filas
+                if actual_lista_origen.celda.color != actual_lista_destino.celda.color:
+                    if primer_nodo_erroneo is None:
+                        primer_nodo_erroneo = actual_lista_origen
+                    if primer_nodo_erroneo is not None and actual_lista_origen.celda.color != primer_nodo_erroneo.celda.color:
+                        if segundo_nodo_erroneo is None:
+                            segundo_nodo_erroneo = actual_lista_origen
+                            distancia_entre_celdas_erroneas = abs(
+                                segundo_nodo_erroneo.celda.x - primer_nodo_erroneo.celda.x) + abs(
+                                segundo_nodo_erroneo.celda.y - primer_nodo_erroneo.celda.y)
+                        else:
+                            nueva_distancia = abs(actual_lista_origen.celda.x - primer_nodo_erroneo.celda.x) + abs(
+                                actual_lista_origen.celda.y - primer_nodo_erroneo.celda.y)
+                            if nueva_distancia < distancia_entre_celdas_erroneas:
+                                segundo_nodo_erroneo = actual_lista_origen
+
+                actual_lista_origen = actual_lista_origen.siguiente
+                actual_lista_destino = actual_lista_destino.siguiente
+
+            actual_fila_origen = actual_fila_origen.siguiente
+            actual_fila_destino = actual_fila_destino.siguiente
+
+
+        if primer_nodo_erroneo is None or segundo_nodo_erroneo is None:
+            cambios_hechos = 0
+            return
+        else:
+            armar_camino(self, primer_nodo_erroneo, segundo_nodo_erroneo, costo_switch)
+
+
+
+def armar_camino(matriz_origen, nodo_inicio, nodo_destino, costo_switch):
+    camino_entre_celdas = Tablero_Lineal()
+    columna_destino = nodo_destino.celda.y
+    fila_destino = nodo_destino.celda.x
+    fila_origen = nodo_inicio.celda.x
+    columna_origen = nodo_inicio.celda.y
+    if nodo_destino.celda.x == nodo_inicio.celda.x:
+        print("el nodo inicio está a la izquierda del nodo destino") #vamos a crear la lista para el caso más simple
+        while nodo_inicio.celda.y <= nodo_destino.celda.y:
+            if nodo_inicio.celda.y < nodo_destino.celda.y:
+                camino_entre_celdas.insertar(nodo_inicio.celda)
+                nodo_inicio = nodo_inicio.siguiente
+                continue
+            if nodo_inicio.celda.y == nodo_destino.celda.y:
+                camino_entre_celdas.insertar(nodo_inicio.celda)
                 break
 
-            fila_actual = fila_actual.siguiente
-            fila_actual_destino = fila_actual_destino.siguiente
-        return estado
+        print("")
+    else:
+        print("el nodo destino está mas abajo que el nodo origen")
+        if nodo_inicio.celda.y < nodo_destino.celda.y:
+
+            print("el nodo destino está abajo y a la derecha")
+            # obtenemos las celdas hacia abajo
+            while fila_origen <= fila_destino:
+                if fila_origen < fila_destino:
+                    camino_entre_celdas.insertar(matriz_origen.Buscar_celda(fila_origen, columna_origen))
+                    fila_origen += 1
+                    continue
+                if fila_origen == fila_destino:
+                    break
+
+
+
+
+                    # obtenemos las celdas hacia la derecha
+            while columna_origen <= columna_destino:
+                if columna_origen < columna_destino:
+                    camino_entre_celdas.insertar(matriz_origen.Buscar_celda(fila_origen, columna_origen))
+                    columna_origen += 1
+                    continue
+                if columna_origen == columna_destino:
+                    camino_entre_celdas.insertar(matriz_origen.Buscar_celda(fila_origen, fila_destino))
+                    break
+
+
+        elif nodo_inicio.celda.y > nodo_destino.celda.y:
+            print("el nodo destino está abajo y a la izquierda")
+                # obtenemos las celdas hacia abajo
+            while fila_origen <= fila_destino:
+                if fila_origen < fila_destino:
+                    camino_entre_celdas.insertar(matriz_origen.Buscar_celda(fila_origen, columna_origen))
+                    fila_origen += 1
+                    continue
+                if fila_origen == fila_destino:
+                    break
+
+
+            # obtenemos las celdas hacia la izquierda
+            while columna_origen >= columna_destino:
+                if columna_origen > columna_destino:
+                    camino_entre_celdas.insertar(matriz_origen.Buscar_celda(fila_origen, columna_origen))
+                    columna_origen -= 1
+                    continue
+                if columna_origen == columna_destino:
+                    camino_entre_celdas.insertar(matriz_origen.Buscar_celda(fila_origen, columna_origen))
+                    break
+
+
+
+        elif nodo_inicio.celda.y == nodo_destino.celda.y:
+            print("el nodo destino está abajo del nodo origen")
+            # obtenemos las celdas hacia abajo
+            while fila_origen <= fila_destino:
+                if fila_origen < fila_destino:
+                    camino_entre_celdas.insertar(matriz_origen.Buscar_celda(fila_origen, columna_origen))
+                    fila_origen += 1
+                    continue
+                if fila_origen == fila_destino:
+                    camino_entre_celdas.insertar(matriz_origen.Buscar_celda(fila_origen, columna_origen))
+                    break
+
+    check_camino(camino_entre_celdas, costo_switch)
+
+
+def check_camino(camino_entre_celdas, coste_switch):
+    global coste_intercambios, solucion_intercambios_simples, cambios_hechos
+    nodo_origen = camino_entre_celdas.primero
+    nodo_destino = camino_entre_celdas.ultimo
+    if camino_entre_celdas.size == 2:
+        coste_intercambios += coste_switch
+        solucion_intercambios_simples += "La celda en la fila: " + str(
+            nodo_origen.celda.x) + " y columna: " + str(
+            nodo_origen.celda.y) + " ha sido intercambiada por la celda en la fila: " + str(
+            nodo_destino.celda.x) + " y columna: " + str(
+            nodo_destino.celda.y) + " el coste acumulado es de: " + str(coste_intercambios) + "\n"
+        cambios_hechos += 1
+        nodo_origen.celda.color = not nodo_origen.celda.color
+        nodo_destino.celda.color = not nodo_destino.celda.color
+        return
+
+    else:
+        actual_camino = camino_entre_celdas.primero.siguiente
+        camino_de_un_mismo_color = True
+        color_actual = camino_entre_celdas.primero.siguiente.celda.color
+        while actual_camino.celda.x != nodo_destino.celda.x or actual_camino.celda.y != nodo_destino.celda.y:
+            if actual_camino.celda.color != color_actual:
+                camino_de_un_mismo_color = False
+                break
+
+            actual_camino = actual_camino.siguiente
+
+        print("el camino es de un mismo color? ", camino_de_un_mismo_color)
+        if camino_de_un_mismo_color:
+            soluciona_mismo_color(camino_entre_celdas, coste_switch, color_actual)
+        else:
+            soluciona_distinto_color(camino_entre_celdas, coste_switch)
+
+def soluciona_mismo_color(camino_entre_celdas, costo_switch, color):
+    global coste_intercambios, solucion_intercambios_simples, cambios_hechos
+    if color:
+        # print("el color del camino es todo blanco")
+        if camino_entre_celdas.primero.celda.color != color:
+            # print("recorrer todo el camino de izquierda a derecha. Moviendo la celda origen a la celda destino")
+            Nodo_izquierda_derecha = camino_entre_celdas.primero
+            while Nodo_izquierda_derecha:
+                coste_intercambios += costo_switch
+                solucion_intercambios_simples += "La celda en la fila: " + str(
+                    Nodo_izquierda_derecha.celda.x) + " y columna: " + str(
+                    Nodo_izquierda_derecha.celda.y) + " ha sido intercambiada por la celda en la fila: " + str(
+                    Nodo_izquierda_derecha.siguiente.celda.x) + " y columna: " + str(
+                    Nodo_izquierda_derecha.siguiente.celda.y) + " el coste acumulado es de: " + str(
+                    coste_intercambios) + "\n"
+                cambios_hechos += 1
+                Nodo_izquierda_derecha = Nodo_izquierda_derecha.siguiente
+                if Nodo_izquierda_derecha.siguiente is None:
+                    break
+            camino_entre_celdas.primero.celda.color = not camino_entre_celdas.primero.celda.color
+            camino_entre_celdas.ultimo.celda.color = not camino_entre_celdas.ultimo.celda.color
+
+        else:
+            # print("recorrer el camino de derecha a izquierda. Moviendo la celda destino a la celda origen")
+            Nodo_derecha_izquierda = camino_entre_celdas.ultimo
+            while Nodo_derecha_izquierda:
+                coste_intercambios += costo_switch
+                solucion_intercambios_simples += "La celda en la fila: " + str(
+                    Nodo_derecha_izquierda.celda.x) + " y columna: " + str(
+                    Nodo_derecha_izquierda.celda.y) + " ha sido intercambiada por la celda en la fila: " + str(
+                    Nodo_derecha_izquierda.anterior.celda.x) + " y columna: " + str(
+                    Nodo_derecha_izquierda.anterior.celda.y) + " el coste acumulado es de: " + str(
+                    coste_intercambios) + "\n"
+                cambios_hechos += 1
+                Nodo_derecha_izquierda = Nodo_derecha_izquierda.anterior
+                if Nodo_derecha_izquierda.anterior is None:
+                    break
+            camino_entre_celdas.primero.celda.color = not camino_entre_celdas.primero.celda.color
+            camino_entre_celdas.ultimo.celda.color = not camino_entre_celdas.ultimo.celda.color
+
+
+    else:
+        # print("el color del camino es todo negro")
+        if camino_entre_celdas.primero.celda.color != color:
+            # print( "recorrer todo el camino de izquierda a derecha. Moviendo la celda origen a la celda destino")
+            Nodo_izquierda_derecha = camino_entre_celdas.primero
+            while Nodo_izquierda_derecha:
+                coste_intercambios += costo_switch
+                solucion_intercambios_simples += "La celda en la fila: " + str(
+                    Nodo_izquierda_derecha.celda.x) + " y columna: " + str(
+                    Nodo_izquierda_derecha.celda.y) + " ha sido intercambiada por la celda en la fila: " + str(
+                    Nodo_izquierda_derecha.siguiente.celda.x) + " y columna: " + str(
+                    Nodo_izquierda_derecha.siguiente.celda.y) + " el coste acumulado es de: " + str(
+                    coste_intercambios) + "\n"
+                cambios_hechos += 1
+                Nodo_izquierda_derecha = Nodo_izquierda_derecha.siguiente
+                if Nodo_izquierda_derecha.siguiente is None:
+                    break
+
+            camino_entre_celdas.primero.celda.color = not camino_entre_celdas.primero.celda.color
+            camino_entre_celdas.ultimo.celda.color = not camino_entre_celdas.ultimo.celda.color
+
+        else:
+            # print("recorrer el camino de derecha a izquierda. Moviendo la celda destino a la celda origen")
+            Nodo_derecha_izquierda = camino_entre_celdas.ultimo
+            while Nodo_derecha_izquierda:
+                coste_intercambios += costo_switch
+                solucion_intercambios_simples += "La celda en la fila: " + str(
+                    Nodo_derecha_izquierda.celda.x) + " y columna: " + str(
+                    Nodo_derecha_izquierda.celda.y) + " ha sido intercambiada por la celda en la fila: " + str(
+                    Nodo_derecha_izquierda.anterior.celda.x) + " y columna: " + str(
+                    Nodo_derecha_izquierda.anterior.celda.y) + " el coste acumulado es de: " + str(
+                    coste_intercambios) + "\n"
+                cambios_hechos += 1
+                Nodo_derecha_izquierda = Nodo_derecha_izquierda.anterior
+                if Nodo_derecha_izquierda.anterior is None:
+                    break
+
+            camino_entre_celdas.primero.celda.color = not camino_entre_celdas.primero.celda.color
+            camino_entre_celdas.ultimo.celda.color = not camino_entre_celdas.ultimo.celda.color
+
+def soluciona_distinto_color(camino_entre_celdas, coste_switch):
+    global coste_intercambios, solucion_intercambios_simples, cambios_hechos
+    nodo_origen = camino_entre_celdas.primero
+    nodo_destino = None
+
+    actual_nodo_camino_celdas = camino_entre_celdas.primero.siguiente
+
+    while actual_nodo_camino_celdas:
+        if actual_nodo_camino_celdas.celda.color != nodo_origen.celda.color:
+            nodo_destino = actual_nodo_camino_celdas
+            break
+        actual_nodo_camino_celdas = actual_nodo_camino_celdas.siguiente
+
+    distancia_entre_celdas_erroneas = abs(
+        nodo_destino.celda.x - nodo_origen.celda.x) + abs(
+        nodo_destino.celda.y - nodo_origen.celda.y)
+
+    if distancia_entre_celdas_erroneas == 1:
+        coste_intercambios += coste_switch
+        solucion_intercambios_simples += "La celda en la fila: " + str(
+            nodo_origen.celda.x) + " y columna: " + str(
+            nodo_origen.celda.y) + " ha sido intercambiada por la celda en la fila: " + str(
+            nodo_destino.celda.x) + " y columna: " + str(
+            nodo_destino.celda.y) + " el coste acumulado es de: " + str(coste_intercambios) + "\n"
+        cambios_hechos += 1
+        nodo_origen.celda.color = not nodo_origen.celda.color
+        nodo_destino.celda.color = not nodo_destino.celda.color
+        return
+
+    else:
+        subcamino = Tablero_Lineal()
+        while True:
+            if nodo_origen.celda.y != nodo_destino.celda.y or nodo_origen.celda.x != nodo_destino.celda.x:
+                subcamino.insertar(nodo_origen.celda)
+                nodo_origen = nodo_origen.siguiente
+                continue
+            if nodo_origen.celda.y == nodo_destino.celda.y or nodo_origen.celda.x == nodo_destino.celda.x:
+                subcamino.insertar(nodo_origen.celda)
+                break
+
+        check_camino(subcamino, coste_switch)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

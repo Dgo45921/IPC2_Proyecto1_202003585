@@ -67,7 +67,7 @@ class Tablero_Lineal:
 
             # se considera si debemos girar más de alguna celda
         if contador_celdas_negras_lista_origen == contador_celdas_negras_lista_destino and contador_celdas_blancas_lista_origen and contador_celdas_blancas_lista_destino:
-            #print("no hay necesidad de voltear celdas")
+            # print("no hay necesidad de voltear celdas")
             self.solucionar(lista_celdas_destino, costo_switch)
             solucion_volteando_celdas = lista_origen.voltear_todas(lista_celdas_destino, costo_flip)
             if coste_volteando_celdas < coste_intercambios_simples or coste_volteando_celdas == coste_intercambios_simples:
@@ -99,11 +99,11 @@ class Tablero_Lineal:
 
 
         else:
-            #print("se necesitan voltear celdas")
+            # print("se necesitan voltear celdas")
             self.solucionar(lista_celdas_destino, costo_switch)
             solucion_volteando_celdas = self.voltear_todas(lista_celdas_destino, costo_flip)
-            solucion_combinada = solucion_intercambios_simples + solucion_volteando_celdas
             coste_combinado = coste_volteando_celdas + coste_intercambios_simples
+            solucion_combinada = "----pasos intercambios----" + solucion_intercambios_simples + "\n ----pasos volteos----\n" + solucion_volteando_celdas + "\nEl coste final ha sido de: " + str(coste_combinado)
             coste_volteando_celdas = 0
             solucion_volteando_celdas = ""
             lista_origen.voltear_todas(lista_celdas_destino, costo_flip)
@@ -197,9 +197,9 @@ class Tablero_Lineal:
 
             if camino_de_un_mismo_color:
                 if color_actual:
-                    #print("el color del camino es todo blanco")
+                    # print("el color del camino es todo blanco")
                     if camino_entre_celdas.primero.celda.color != color_actual:
-                        #print("recorrer todo el camino de izquierda a derecha. Moviendo la celda origen a la celda destino")
+                        # print("recorrer todo el camino de izquierda a derecha. Moviendo la celda origen a la celda destino")
                         Nodo_izquierda_derecha = camino_entre_celdas.primero
                         while Nodo_izquierda_derecha:
                             coste_intercambios_simples += costo_switch
@@ -217,7 +217,7 @@ class Tablero_Lineal:
                         camino_entre_celdas.ultimo.celda.color = not camino_entre_celdas.ultimo.celda.color
 
                     else:
-                        #print("recorrer el camino de derecha a izquierda. Moviendo la celda destino a la celda origen")
+                        # print("recorrer el camino de derecha a izquierda. Moviendo la celda destino a la celda origen")
                         Nodo_derecha_izquierda = camino_entre_celdas.ultimo
                         while Nodo_derecha_izquierda:
                             coste_intercambios_simples += costo_switch
@@ -236,9 +236,9 @@ class Tablero_Lineal:
 
 
                 else:
-                    #print("el color del camino es todo negro")
+                    # print("el color del camino es todo negro")
                     if camino_entre_celdas.primero.celda.color != color_actual:
-                        #print( "recorrer todo el camino de izquierda a derecha. Moviendo la celda origen a la celda destino")
+                        # print( "recorrer todo el camino de izquierda a derecha. Moviendo la celda origen a la celda destino")
                         Nodo_izquierda_derecha = camino_entre_celdas.primero
                         while Nodo_izquierda_derecha:
                             coste_intercambios_simples += costo_switch
@@ -257,7 +257,7 @@ class Tablero_Lineal:
                         camino_entre_celdas.ultimo.celda.color = not camino_entre_celdas.ultimo.celda.color
 
                     else:
-                        #print("recorrer el camino de derecha a izquierda. Moviendo la celda destino a la celda origen")
+                        # print("recorrer el camino de derecha a izquierda. Moviendo la celda destino a la celda origen")
                         Nodo_derecha_izquierda = camino_entre_celdas.ultimo
                         while Nodo_derecha_izquierda:
                             coste_intercambios_simples += costo_switch
@@ -278,7 +278,7 @@ class Tablero_Lineal:
 
 
             else:
-                #print("el color del camino si cambia")
+                # print("el color del camino si cambia")
                 celda_origen = camino_entre_celdas.primero
                 celda_destino = None
 
@@ -355,7 +355,7 @@ class Tablero_Lineal:
                                 camino_entre_celdas.ultimo.celda.color = not camino_entre_celdas.ultimo.celda.color
 
                             else:
-                               # print("recorrer el camino de derecha a izquierda. Moviendo la celda destino a la celda origen")
+                                # print("recorrer el camino de derecha a izquierda. Moviendo la celda destino a la celda origen")
                                 Nodo_der_izq = subcamino.ultimo
                                 while Nodo_der_izq:
                                     coste_intercambios_simples += costo_switch
@@ -374,9 +374,9 @@ class Tablero_Lineal:
 
 
                         else:
-                            #print("el color del camino es todo negro")
+                            # print("el color del camino es todo negro")
                             if subcamino.primero.celda.color != color_actual2:
-                                #print("recorrer todo el camino de izquierda a derecha. Moviendo la celda origen a la celda destino")
+                                # print("recorrer todo el camino de izquierda a derecha. Moviendo la celda origen a la celda destino")
                                 Nodo_izq_der = subcamino.primero
                                 while Nodo_izq_der:
                                     coste_intercambios_simples += costo_switch
@@ -395,7 +395,7 @@ class Tablero_Lineal:
                                 subcamino.ultimo.celda.color = not subcamino.ultimo.celda.color
 
                             else:
-                                #print("recorrer el camino de derecha a izquierda. Moviendo la celda destino a la celda origen")
+                                # print("recorrer el camino de derecha a izquierda. Moviendo la celda destino a la celda origen")
                                 Nodo_der_izq = subcamino.ultimo
                                 while Nodo_der_izq:
                                     coste_intercambios_simples += costo_switch
@@ -414,7 +414,7 @@ class Tablero_Lineal:
                                 subcamino.ultimo.celda.color = not subcamino.ultimo.celda.color
 
         if cantidad_cambios > 0:
-            #print(solucion_intercambios_simples)
+            # print(solucion_intercambios_simples)
             self.solucionar(lista_celdas_destino, costo_switch)
 
 
@@ -458,17 +458,3 @@ class Tablero_Lineal:
 
             actual = actual.siguiente
         return contador
-
-    def comparar_listas(self, lista_celdas_destino):
-        iguales = False
-        actual = self.primero
-        actual2 = lista_celdas_destino.primero
-        while actual and actual2:
-            if actual.celda.color == actual2.celda.color:
-                iguales = True
-            else:
-                iguales = False
-                break
-            actual = actual.siguiente
-            actual2 = actual2.siguiente
-        return iguales
