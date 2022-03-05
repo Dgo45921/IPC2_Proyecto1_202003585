@@ -119,7 +119,7 @@ class Tablero:
             fila_actual_origen = fila_actual_origen.siguiente
         return True
 
-    def Resolver(self, matriz_destino, filas, columnas, costo_flip, costo_switch):
+    def Resolver(self, matriz_destino, filas, costo_flip, costo_switch):
         global solucion_intercambios_simples, solucion_volteando_celdas, coste_intercambios, coste_volteos
         coste_intercambios = coste_volteos = 0
         solucion_volteando_celdas = solucion_intercambios_simples = ""
@@ -131,14 +131,14 @@ class Tablero:
         matriz_para_imprimir = deepcopy(self)
 
         if casillas_negras_destino == casillas_negras_origen and casillas_blancas_destino == casillas_blancas_origen:
-            print("no hay necesidad de hacer cambios")
+            #print("no hay necesidad de hacer cambios")
             while not self.comparar_matrices(matriz_destino):
                 self.hallar_celdas_erroneas(matriz_destino, filas, costo_flip, costo_switch)
             matriz_para_voltear.Voltear_erroneas(matriz_destino, costo_flip)
 
 
             if coste_volteos < coste_intercambios or coste_intercambios == coste_volteos:
-                print("es mas barato voltear todas")
+                #print("es mas barato voltear todas")
                 print("Para visualizar los pasos para resolver la matriz usted debe de escoger una opción:")
                 print("Si desea ver la solución paso a paso en consola ingrese la letra 'c', si desea verla en un archivo.txt ingrese la letra 't' ")
                 opcion = input()
@@ -153,7 +153,7 @@ class Tablero:
 
 
             elif coste_volteos > coste_intercambios:
-                print("es mejor intercambiar")
+                #print("es mejor intercambiar")
                 print("Para visualizar los pasos para resolver la matriz usted debe de escoger una opción:")
                 print(
                     "Si desea ver la solución paso a paso en consola ingrese la letra 'c', si desea verla en un archivo.txt ingrese la letra 't' ")
@@ -167,7 +167,7 @@ class Tablero:
 
 
         else:
-            print("se necesitan voltear casillas")
+            #print("se necesitan voltear casillas")
             self.hallar_celdas_erroneas(matriz_destino, filas, costo_flip, costo_switch)
             while cambios_hechos > 0:
                 self.hallar_celdas_erroneas(matriz_destino, filas, costo_flip, costo_switch)
@@ -182,7 +182,7 @@ class Tablero:
             matriz_para_voltear.Voltear_erroneas(matriz_destino, costo_flip)
 
             if costo_total < coste_volteos or costo_total == coste_volteos:
-                print("es mejor voltear")
+                #print("es mejor voltear")
                 print("Para visualizar los pasos para resolver la matriz usted debe de escoger una opción:")
                 print(
                     "Si desea ver la solución paso a paso en consola ingrese la letra 'c', si desea verla en un archivo.txt ingrese la letra 't' ")
@@ -197,15 +197,14 @@ class Tablero:
 
             elif coste_volteos < costo_total:
                 print("Para visualizar los pasos para resolver la matriz usted debe de escoger una opción:")
-                print(
-                    "Si desea ver la solución paso a paso en consola ingrese la letra 'c', si desea verla en un archivo.txt ingrese la letra 't' ")
+                print("Si desea ver la solución paso a paso en consola ingrese la letra 'c', si desea verla en un archivo.txt ingrese la letra 't' ")
                 opcion = input()
 
                 if opcion == "c":
-                    print(costo_total)
+                    print(solucion_volteando_celdas)
                     FuncionCelda.Imprimir_matriciales(matriz_para_imprimir, matriz_destino)
                 elif opcion == "t":
-                    Manejo_archivos.Crear_Instrucciones(costo_total)
+                    Manejo_archivos.Crear_Instrucciones(solucion_volteando_celdas)
                     FuncionCelda.Imprimir_matriciales(matriz_para_imprimir, matriz_destino)
 
 
@@ -257,7 +256,7 @@ def armar_camino(matriz_origen, nodo_inicio, nodo_destino, costo_switch):
     fila_origen = nodo_inicio.celda.x
     columna_origen = nodo_inicio.celda.y
     if nodo_destino.celda.x == nodo_inicio.celda.x:
-        print("el nodo inicio está a la izquierda del nodo destino") #vamos a crear la lista para el caso más simple
+        #print("el nodo inicio está a la izquierda del nodo destino") #vamos a crear la lista para el caso más simple
         while nodo_inicio.celda.y <= nodo_destino.celda.y:
             if nodo_inicio.celda.y < nodo_destino.celda.y:
                 camino_entre_celdas.insertar(nodo_inicio.celda)
@@ -267,12 +266,12 @@ def armar_camino(matriz_origen, nodo_inicio, nodo_destino, costo_switch):
                 camino_entre_celdas.insertar(nodo_inicio.celda)
                 break
 
-        print("")
+        #print("")
     else:
-        print("el nodo destino está mas abajo que el nodo origen")
+       # print("el nodo destino está mas abajo que el nodo origen")
         if nodo_inicio.celda.y < nodo_destino.celda.y:
 
-            print("el nodo destino está abajo y a la derecha")
+           # print("el nodo destino está abajo y a la derecha")
             # obtenemos las celdas hacia abajo
             while fila_origen <= fila_destino:
                 if fila_origen < fila_destino:
@@ -297,7 +296,7 @@ def armar_camino(matriz_origen, nodo_inicio, nodo_destino, costo_switch):
 
 
         elif nodo_inicio.celda.y > nodo_destino.celda.y:
-            print("el nodo destino está abajo y a la izquierda")
+            #print("el nodo destino está abajo y a la izquierda")
                 # obtenemos las celdas hacia abajo
             while fila_origen <= fila_destino:
                 if fila_origen < fila_destino:
@@ -321,7 +320,7 @@ def armar_camino(matriz_origen, nodo_inicio, nodo_destino, costo_switch):
 
 
         elif nodo_inicio.celda.y == nodo_destino.celda.y:
-            print("el nodo destino está abajo del nodo origen")
+            #print("el nodo destino está abajo del nodo origen")
             # obtenemos las celdas hacia abajo
             while fila_origen <= fila_destino:
                 if fila_origen < fila_destino:
@@ -362,7 +361,7 @@ def check_camino(camino_entre_celdas, coste_switch):
 
             actual_camino = actual_camino.siguiente
 
-        print("el camino es de un mismo color? ", camino_de_un_mismo_color)
+        #print("el camino es de un mismo color? ", camino_de_un_mismo_color)
         if camino_de_un_mismo_color:
             soluciona_mismo_color(camino_entre_celdas, coste_switch, color_actual)
         else:

@@ -103,7 +103,7 @@ class Tablero_Lineal:
             self.solucionar(lista_celdas_destino, costo_switch)
             solucion_volteando_celdas = self.voltear_todas(lista_celdas_destino, costo_flip)
             coste_combinado = coste_volteando_celdas + coste_intercambios_simples
-            solucion_combinada = "----pasos intercambios----" + solucion_intercambios_simples + "\n ----pasos volteos----\n" + solucion_volteando_celdas + "\nEl coste final ha sido de: " + str(coste_combinado)
+            solucion_combinada = "----pasos intercambios----\n" + solucion_intercambios_simples + "\n ----pasos volteos----\n" + solucion_volteando_celdas + "\nEl coste final ha sido de: " + str(coste_combinado)
             coste_volteando_celdas = 0
             solucion_volteando_celdas = ""
             lista_origen.voltear_todas(lista_celdas_destino, costo_flip)
@@ -430,7 +430,7 @@ class Tablero_Lineal:
             if actual.celda.color != actual2.celda.color:
                 coste_volteando_celdas += costo_flip
                 actual.celda.color = not actual.celda.color
-                solucion_volteando_celdas += "Se ha volteado la celda con fila x: " + str(actual.celda.x
+                solucion_volteando_celdas += "Se ha volteado la celda con fila: " + str(actual.celda.x
                                                                                           ) + " y columna: " + str(
                     actual.celda.y) + " el coste es: " + str(coste_volteando_celdas) + "\n"
 

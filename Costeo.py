@@ -7,17 +7,6 @@ texto_solucion = ""
 
 
 def InicioCosteo(nodo_piso, nodo_patron_origen, nodo_patron_destino):
-    # print("nombre del piso: ", nodo_piso.piso.nombre)
-    # print("columnas del piso: ", nodo_piso.piso.columns)
-    # print("filas del piso: ", nodo_piso.piso.rows)
-    # print("costo flip del piso: ", nodo_piso.piso.costo_flip)
-    # print("costo switch del piso: ", nodo_piso.piso.costo_switch)
-    # print("")
-    # print("codigo del patron origen: ", nodo_patron_origen.patron.codigo)
-    # print("string del patrón origen: ", nodo_patron_origen.patron.string_patron)
-    # print("")
-    # print("codigo del patron destino: ", nodo_patron_destino.patron.codigo)
-    # print("string del patrón destino: ", nodo_patron_destino.patron.string_patron)
     if nodo_piso.piso.rows == 1 and nodo_piso.piso.columns > 1:
         contador_filas = 0
         contador_columnas = 0
@@ -64,7 +53,7 @@ def InicioCosteo(nodo_piso, nodo_patron_origen, nodo_patron_destino):
         Lista_lineal(nodo_piso.piso.rows, nodo_piso.piso.columns, lista_celdas_origen, lista_celdas_destino,
                      nodo_piso.piso.costo_flip, nodo_piso.piso.costo_switch)
 
-    if nodo_piso.piso.rows > 1 and nodo_piso.piso.columns > 1:
+    if nodo_piso.piso.rows > 1 and nodo_piso.piso.columns > 1 or nodo_piso.piso.rows > 1 and nodo_piso.piso.columns == 1:
 
         tablero_nuevo = Tablero()
         tablero_nuevo2 = Tablero()
@@ -120,7 +109,7 @@ def InicioCosteo(nodo_piso, nodo_patron_origen, nodo_patron_destino):
                     contador_columnas = 0
                     contador_filas += 1
 
-        Matriz(tablero_nuevo, tablero_nuevo2, nodo_piso.piso.rows, nodo_piso.piso.columns, nodo_piso.piso.costo_flip,
+        Matriz(tablero_nuevo, tablero_nuevo2, nodo_piso.piso.rows, nodo_piso.piso.costo_flip,
                nodo_piso.piso.costo_switch)
 
 
@@ -133,5 +122,5 @@ def Lista_lineal(filas, columnas, lista_celdas_origen, lista_celdas_destino, cos
         print("matriz vertical")
 
 
-def Matriz(matriz_origen, matriz_destino, filas, columnas, costo_flip, costo_switch):
-    matriz_origen.Resolver(matriz_destino, filas, columnas, costo_flip, costo_switch)
+def Matriz(matriz_origen, matriz_destino, filas, costo_flip, costo_switch):
+    matriz_origen.Resolver(matriz_destino, filas, costo_flip, costo_switch)

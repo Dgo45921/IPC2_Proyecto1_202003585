@@ -170,23 +170,23 @@ def Imprimir_matriciales(matriz_origen, matriz_destino):
 labelloc="t";
        label="Patron origen";
  tabla [shape=none, margin=0, label=<
- <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="2.5" CELLPADDING="20">    """
+ <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="2.5" CELLPADDING="20">  \n  """
 
     fila_actual = matriz_origen.primero
 
     while fila_actual:
-        cadena1 += "<TR>"
+        cadena1 += "<TR>\n"
         celda_actual = fila_actual.contenido_fila.primero
         while celda_actual:
             if celda_actual.celda.color:
-                cadena1 += "<TD> </TD>"
+                cadena1 += "<TD> </TD>\n"
             else:
-                cadena1 += '<TD BGCOLOR="black"> </TD>'
+                cadena1 += '<TD BGCOLOR="black"> </TD>\n'
 
             celda_actual = celda_actual.siguiente
 
         fila_actual = fila_actual.siguiente
-        cadena1 += "</TR>"
+        cadena1 += "</TR>\n"
 
     cadena1 += "</TABLE>>];}"
     archivo_nuevo = open("grafica_origen.dot", "w")
@@ -200,23 +200,23 @@ labelloc="t";
     labelloc="t";
            label="Patron destino";
      tabla [shape=none, margin=0, label=<
-     <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="2.5" CELLPADDING="20">    """
+     <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="2.5" CELLPADDING="20"> \n   """
 
     fila_actual2 = matriz_destino.primero
 
     while fila_actual2:
-        cadena2 += "<TR>"
+        cadena2 += "<TR>\n"
         celda_actual2 = fila_actual2.contenido_fila.primero
         while celda_actual2:
             if celda_actual2.celda.color:
-                cadena2 += "<TD> </TD>"
+                cadena2 += "<TD> </TD>\n"
             else:
-                cadena2 += '<TD BGCOLOR="black"> </TD>'
+                cadena2 += '<TD BGCOLOR="black"> </TD>\n'
 
             celda_actual2 = celda_actual2.siguiente
 
         fila_actual2 = fila_actual2.siguiente
-        cadena2 += "</TR>"
+        cadena2 += "</TR>\n"
 
     cadena2 += '</TABLE>>];}  '
 

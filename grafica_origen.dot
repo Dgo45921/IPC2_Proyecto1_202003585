@@ -1,5 +1,0 @@
-digraph html {
-labelloc="t";
-       label="Patron origen";
- tabla [shape=none, margin=0, label=<
- <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="2.5" CELLPADDING="20">    <TR><TD> </TD><TD> </TD><TD> </TD><TD> </TD></TR><TR><TD BGCOLOR="black"> </TD><TD BGCOLOR="black"> </TD><TD BGCOLOR="black"> </TD><TD> </TD></TR><TR><TD> </TD><TD> </TD><TD BGCOLOR="black"> </TD><TD BGCOLOR="black"> </TD></TR><TR><TD> </TD><TD> </TD><TD BGCOLOR="black"> </TD><TD BGCOLOR="black"> </TD></TR></TABLE>>];}
