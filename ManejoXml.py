@@ -35,13 +35,16 @@ def Leer(ruta):
                     texto = re.sub(r"[\n\t\s]*", "", texto)
 
                     if len(texto) == rows * columns:
-                        new_patron = Patron(dato.get("codigo"), texto, 0)
+                        new_patron = Patron(dato.get("codigo").lower(), texto, 0)
                         lista_patrones.insertar(new_patron)
+                        lista_patrones.ordenar()
 
-            new_piso = Piso(name, rows, columns, flip, switch, lista_patrones, 0)
+            new_piso = Piso(name.lower(), rows, columns, flip, switch, lista_patrones, 0)
             lista_pisos.insertar(new_piso)
         print("Datos cargados con éxito, regresando al menú principal")
         datos_cargados = True
+        lista_pisos.ordenar()
+
 
     except Exception as e:
         print("Ha ocurrido un error, tenga más detalles: ", e)

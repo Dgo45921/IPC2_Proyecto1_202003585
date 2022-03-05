@@ -9,20 +9,10 @@ class ListaPiso:
         if self.primero is None:
             self.primero = NodoPiso(piso=piso_ingresado)
             return
-        aux = NodoPiso(piso=piso_ingresado)
-        if aux.piso.nombre < self.primero.piso.nombre:
-            aux.siguiente = self.primero
-            self.primero = aux
-            return
-        else:
-            actual = self.primero
-            while actual.siguiente:
-                if actual.siguiente.piso.nombre > aux.piso.nombre > actual.piso.nombre:
-                    aux.siguiente = actual.siguiente
-                    actual.siguiente = aux
-                    break
-                actual = actual.siguiente
-            actual.siguiente = NodoPiso(piso=piso_ingresado)
+        actual = self.primero
+        while actual.siguiente:
+            actual = actual.siguiente
+        actual.siguiente = NodoPiso(piso=piso_ingresado)
 
     def recorrer(self):
         actual = self.primero
@@ -58,3 +48,20 @@ class ListaPiso:
             return actual
         else:
             return None
+
+    def ordenar(self):
+        if self.primero is None:
+            return
+        cambio = True
+        actual = self.primero
+        while cambio:
+            cambio = False
+            while actual is not None and actual.siguiente is not None:
+                if actual.piso.nombre > actual.siguiente.piso.nombre:
+                    aux = actual.piso
+                    actual.piso = actual.siguiente.piso
+                    actual.siguiente.piso = aux
+                    cambio = True
+                actual = actual.siguiente
+
+

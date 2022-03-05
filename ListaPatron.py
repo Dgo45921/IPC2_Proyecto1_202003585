@@ -9,20 +9,10 @@ class ListaPatron:
         if self.primero is None:
             self.primero = NodoPatron(patron=patron_ingresado)
             return
-        aux = NodoPatron(patron=patron_ingresado)
-        if aux.patron.codigo < self.primero.patron.codigo:
-            aux.siguiente = self.primero
-            self.primero = aux
-            return
-        else:
-            actual = self.primero
-            while actual.siguiente:
-                if actual.siguiente.patron.codigo > aux.patron.codigo > actual.patron.codigo:
-                    aux.siguiente = actual.siguiente
-                    actual.siguiente = aux
-                    break
-                actual = actual.siguiente
-            actual.siguiente = NodoPatron(patron=patron_ingresado)
+        actual = self.primero
+        while actual.siguiente:
+            actual = actual.siguiente
+        actual.siguiente = NodoPatron(patron=patron_ingresado)
 
     def recorrer(self):
         actual = self.primero
@@ -54,3 +44,18 @@ class ListaPatron:
             return actual
         else:
             return None
+
+    def ordenar(self):
+        if self.primero is None:
+            return
+        cambio = True
+        actual = self.primero
+        while cambio:
+            cambio = False
+            while actual is not None and actual.siguiente is not None:
+                if actual.patron.codigo > actual.siguiente.patron.codigo:
+                    aux = actual.patron
+                    actual.patron = actual.siguiente.patron
+                    actual.siguiente.patron = aux
+                    cambio = True
+                actual = actual.siguiente
